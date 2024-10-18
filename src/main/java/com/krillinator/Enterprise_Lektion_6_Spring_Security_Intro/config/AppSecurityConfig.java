@@ -1,5 +1,7 @@
 package com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.config;
 
+import com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.authorities.UserPermission;
+import com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.authorities.UserRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,7 +35,9 @@ public class AppSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login", "/api/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/**").permitAll()
-                        .requestMatchers("/test").hasRole("ADMIN")
+                        // .requestMatchers("/admin").hasRole(UserRole.ADMIN.name())
+                        .requestMatchers("/user").hasRole(UserRole.USER.name())
+                        .requestMatchers("/admin").hasAuthority(UserPermission.DELETE.getPermission()) // TODO ROLE_ not necessary here?
                         .anyRequest()
                         .authenticated()
                 )
@@ -50,6 +54,7 @@ public class AppSecurityConfig {
                 .withDefaultPasswordEncoder()
                 .username("benny")
                 .password("123")
+                .authorities(UserRole.USER.getAuthorities()) // ROLE + Permissions
                 .build();
 
         return new InMemoryUserDetailsManager(user);
