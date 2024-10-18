@@ -2,6 +2,7 @@ package com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,21 +18,26 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class AppSecurityConfig {
 
+    // Override Filter CHain
+    // localhost:8080/ <-- Index is now available for EVERYONE
+    // But - what's happening with /login?
+    // TODO - Question - Why doesn't ("/login").permitAll() <-- work?
+    // TODO - Question - FormLogin.html, where is /login?
+    // TODO - Question - Do you want this class in .gitignore?
+    // TODO - Question #2 - What does anyRequest & Authenticated, do that isn't done by default?
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        // Override Filter CHain
-        // localhost:8080/ <-- Index is now available for EVERYONE
-        // But - what's happening with /login?
-        // TODO - Question - Why doesn't ("/login").permitAll() <-- work?
-        // TODO - Question - FormLogin.html, where is /login?
-        // TODO - Question - Do you want this class in .gitignore?
-
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/", "/login", "/api/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/**").permitAll()
+                        .requestMatchers("/test").hasRole("ADMIN")
+                        .anyRequest()
+                        .authenticated()
                 )
+
                 .formLogin(withDefaults());
 
         return http.build();
