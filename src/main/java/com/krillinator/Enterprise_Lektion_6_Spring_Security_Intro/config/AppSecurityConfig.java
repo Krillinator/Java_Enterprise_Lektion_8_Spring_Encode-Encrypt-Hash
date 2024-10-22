@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -19,13 +20,6 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Configuration
 @EnableWebSecurity
 public class AppSecurityConfig {
-
-    private final AppPasswordConfig bcrypt;
-
-    @Autowired
-    public AppSecurityConfig(AppPasswordConfig bcrypt) {
-        this.bcrypt = bcrypt;
-    }
 
     // Override Filter CHain
     // localhost:8080/ <-- Index is now available for EVERYONE
@@ -56,12 +50,15 @@ public class AppSecurityConfig {
 
     // DEBUG USER
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.builder()
+                .passwordEncoder(passwordEncoder::encode) // TODO THE CHANGE
                 .username("benny")
-                .password(bcrypt.bcryptPasswordEncoder().encode("123"))
+                .password("123") // TODO THE CHANGE
                 .authorities(UserRole.USER.getAuthorities()) // ROLE + Permissions
                 .build();
+
+        System.out.println("PASSWORD FOR DEBUG USER " + user.getPassword());
 
         return new InMemoryUserDetailsManager(user);
     }
