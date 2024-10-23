@@ -14,12 +14,12 @@ public class EnterpriseLektion6SpringSecurityIntroApplication {
 
 		System.out.println("---ADMIN---");
 		System.out.println(
-				UserRole.ADMIN.getPermission()
+				UserRole.ADMIN.getListOfPermissions()
 		);
 
 		System.out.println("---USER---");
 		System.out.println(
-				UserRole.USER.getPermission()
+				UserRole.USER.getListOfPermissions()
 		);
 
 		System.out.println("---GetAuthorities---");

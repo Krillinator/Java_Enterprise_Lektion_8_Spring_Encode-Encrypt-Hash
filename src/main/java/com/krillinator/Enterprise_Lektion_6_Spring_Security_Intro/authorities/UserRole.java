@@ -3,34 +3,27 @@ package com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.authorities;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.authorities.UserPermission.*;
-import static java.util.List.*;
-
-// TODO - Security VS User approach?
 
 public enum UserRole {
 
-    GUEST(of(
-            GET.getPermission())
-    ),
-    USER(of(
-            GET.getPermission(),
-            POST.getPermission())),
-    ADMIN(of(
-            GET.getPermission(),
-            POST.getPermission(),
-            DELETE.getPermission())
-    );
+    GUEST(GET),
+    USER(GET, POST),
+    ADMIN(GET, POST, DELETE);
 
     private final List<String> permission;
 
-    UserRole(List<String> permission) {
-        this.permission = permission;
+    // Improved varargs for dynamic params
+    UserRole(UserPermission... permissionList) {
+        this.permission = Arrays.stream(permissionList)
+                .map(UserPermission::getPermission)
+                .toList();
     }
 
-    public List<String> getPermission() {
+    public List<String> getListOfPermissions() {
         return permission;
     }
 
@@ -39,7 +32,7 @@ public enum UserRole {
         List<SimpleGrantedAuthority> simpleGrantedAuthorityList = new ArrayList<>();
 
         simpleGrantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_" + this.name()));  // Springs Requirement for Authority Role (ROLE_)
-        simpleGrantedAuthorityList.addAll(getPermission().stream().map(SimpleGrantedAuthority::new).toList());
+        simpleGrantedAuthorityList.addAll(getListOfPermissions().stream().map(SimpleGrantedAuthority::new).toList());
 
         return simpleGrantedAuthorityList;
     }
