@@ -1,8 +1,7 @@
-package com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.config;
+package com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.config.security;
 
 import com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.authorities.UserPermission;
 import com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.authorities.UserRole;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
