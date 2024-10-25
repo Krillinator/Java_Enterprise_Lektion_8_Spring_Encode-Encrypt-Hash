@@ -36,6 +36,7 @@ public class AppSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/login").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/**").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/api/**").hasAuthority(UserPermission.DELETE.getPermission())
                         // .requestMatchers("/admin").hasRole(UserRole.ADMIN.name())
                         .requestMatchers("/user").hasRole(UserRole.USER.name())
                         .requestMatchers("/admin").hasAuthority(UserPermission.DELETE.getPermission()) // TODO ROLE_ not necessary here?
@@ -47,6 +48,7 @@ public class AppSecurityConfig {
         return http.build();
     }
 
+    /*
     // DEBUG USER
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
@@ -61,5 +63,7 @@ public class AppSecurityConfig {
 
         return new InMemoryUserDetailsManager(user);
     }
+
+     */
 
 }

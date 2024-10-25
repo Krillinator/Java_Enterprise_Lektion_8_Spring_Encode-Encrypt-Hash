@@ -1,5 +1,6 @@
 package com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.authorities.UserRole;
 import jakarta.persistence.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,7 +24,19 @@ public class CustomUser {
     private boolean isCredentialsNonExpired;
     private boolean isEnabled;
 
-    public CustomUser() {
+    public CustomUser() {}
+    public CustomUser(String username, String password, UserRole userRole, boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialsNonExpired, boolean isEnabled) {
+        this.username = username;
+        this.password = password;
+        this.userRole = userRole;
+        this.isAccountNonExpired = isAccountNonExpired;
+        this.isAccountNonLocked = isAccountNonLocked;
+        this.isCredentialsNonExpired = isCredentialsNonExpired;
+        this.isEnabled = isEnabled;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getUsername() {
@@ -43,11 +56,13 @@ public class CustomUser {
     }
 
     // Authorities include: ROLE & Permissions: ["ROLE_ADMIN", "GET", "DELETE"]
+    // @JsonIgnore
     public List<SimpleGrantedAuthority> getAuthorities() {
         return userRole.getAuthorities();
     }
 
     // Permissions include: ["GET", "DELETE"]
+    // @JsonIgnore // userRepository.save() will print out these details otherwise
     public List<String> getListOfPermissions() {
         return userRole.getListOfPermissions();
     }
