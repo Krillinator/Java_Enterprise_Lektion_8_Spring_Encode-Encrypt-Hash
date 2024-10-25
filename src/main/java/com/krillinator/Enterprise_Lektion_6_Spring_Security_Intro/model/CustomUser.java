@@ -2,9 +2,9 @@ package com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.model;
 
 import com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.authorities.UserRole;
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class CustomUser {
@@ -42,12 +42,23 @@ public class CustomUser {
         this.password = password;
     }
 
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+    // Authorities include: ROLE & Permissions: ["ROLE_ADMIN", "GET", "DELETE"]
+    public List<SimpleGrantedAuthority> getAuthorities() {
+        return userRole.getAuthorities();
     }
 
-    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
-        this.authorities = authorities;
+    // Permissions include: ["GET", "DELETE"]
+    public List<String> getListOfPermissions() {
+        return userRole.getListOfPermissions();
+    }
+
+    // Role include: ADMIN (UserRole.name())
+    public UserRole getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 
     public boolean isAccountNonExpired() {

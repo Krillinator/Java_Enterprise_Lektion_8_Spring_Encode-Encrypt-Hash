@@ -1,10 +1,12 @@
 package com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.config.security;
 
+import com.krillinator.Enterprise_Lektion_6_Spring_Security_Intro.model.CustomUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
+// TODO - Change to RECORD class (manually)
 public class CustomUserDetails implements UserDetails {
 
     private final String username;
@@ -15,6 +17,7 @@ public class CustomUserDetails implements UserDetails {
     private final boolean isCredentialsNonExpired;
     private final boolean isEnabled;
 
+    // Constructors
     public CustomUserDetails(String username, String password, Collection<? extends GrantedAuthority> authorities, boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialsNonExpired, boolean isEnabled) {
         this.username = username;
         this.password = password;
@@ -23,6 +26,15 @@ public class CustomUserDetails implements UserDetails {
         this.isAccountNonLocked = isAccountNonLocked;
         this.isCredentialsNonExpired = isCredentialsNonExpired;
         this.isEnabled = isEnabled;
+    }
+    public CustomUserDetails(CustomUser customUser) {
+        this.username = customUser.getUsername();
+        this.password = customUser.getPassword();
+        this.authorities = customUser.getAuthorities();
+        this.isAccountNonExpired = customUser.isAccountNonExpired();
+        this.isAccountNonLocked = customUser.isAccountNonLocked();
+        this.isCredentialsNonExpired = customUser.isCredentialsNonExpired();
+        this.isEnabled = customUser.isEnabled();
     }
 
     @Override
